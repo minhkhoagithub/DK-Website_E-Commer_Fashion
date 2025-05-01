@@ -13,7 +13,8 @@ const Navbar = () => {
   const location = useLocation()
 
   // Determine if we're on a dark background page (like home)
-  const isDarkBg = location.pathname === "/" || location.pathname === "/catalog"
+  const isDarkBg = location.pathname === "/"
+
 
   const textColor = isDarkBg ? "text-white" : "text-[#3e3e3e]"
   const logoColor = isDarkBg ? "text-white" : "text-[#3e3e3e]"
