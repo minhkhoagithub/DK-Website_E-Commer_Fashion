@@ -37,7 +37,7 @@ const LoginPage = () => {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - Image */}
       <div className="hidden md:block md:w-1/2 relative">
-        <img src="/hero-image.png" alt="Fashion model" className="w-full h-full object-cover" />
+        <img src="../img/login_image.png" alt="Fashion model" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <div className="text-center text-white p-8">
             <h1 className="text-4xl font-serif mb-4">MODEVA</h1>

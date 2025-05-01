@@ -1,22 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Filter, ChevronDown } from "lucide-react"
 
 const CatalogPage = () => {
   const [filterOpen, setFilterOpen] = useState(false)
 
   // Mock product data
-  const products = [
-    { id: 1, name: "Brown Leather Jacket", category: "Outerwear", price: "IDR 1,200,000", image: "/product1.png" },
-    { id: 2, name: "Elegant Black Dress", category: "Dresses", price: "IDR 850,000", image: "/product2.png" },
-    { id: 3, name: "Classic White Shirt", category: "Tops", price: "IDR 500,000", image: "/product1.png" },
-    { id: 4, name: "Denim Jeans", category: "Bottoms", price: "IDR 500,000", image: "/product2.png" },
-    { id: 5, name: "Summer Floral Dress", category: "Dresses", price: "IDR 500,000", image: "/product1.png" },
-    { id: 6, name: "Casual Sneakers", category: "Footwear", price: "IDR 750,000", image: "/product2.png" },
-    { id: 7, name: "Leather Belt", category: "Accessories", price: "IDR 350,000", image: "/product1.png" },
-    { id: 8, name: "Wool Coat", category: "Outerwear", price: "IDR 1,500,000", image: "/product2.png" },
-  ]
+  const [products,setProducts] = useState([])
+  useEffect(() => {
+    fetch("https://6813751b129f6313e21154ee.mockapi.io/api/v1/data/QuanAo")
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Lỗi khi fetch API:", err));
+  }, [])  
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -148,8 +145,8 @@ const CatalogPage = () => {
             <div key={product.id} className="group">
               <div className="relative overflow-hidden rounded-lg mb-3">
                 <img
-                  src={product.image || "/placeholder.svg"}
-                  alt={product.name}
+                  src={product.img?.[0]}
+                  alt={product.Name}
                   className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -158,9 +155,9 @@ const CatalogPage = () => {
                   </button>
                 </div>
               </div>
-              <h3 className="text-[#3e3e3e] font-medium">{product.name}</h3>
+              <h3 className="text-[#3e3e3e] font-medium">{product.Name}</h3>
               <p className="text-gray-600 text-sm">{product.category}</p>
-              <p className="text-[#8b4513] font-medium mt-1">{product.price}</p>
+              <p className="text-[#8b4513] font-medium mt-1">{product.Price}</p>
             </div>
           ))}
         </div>

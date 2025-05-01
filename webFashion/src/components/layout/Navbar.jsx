@@ -21,11 +21,17 @@ const Navbar = () => {
   return (
     <>
       <nav
-        className={`flex justify-between items-center px-8 py-6 ${isDarkBg ? "absolute w-full z-10" : "bg-white shadow-sm"}`}
+        className={`mt-8 z-30 flex justify-between items-center px-8 py-4 ${isDarkBg ? "absolute w-full z-10" : "bg-white shadow-sm"}`}
       >
-        <Link to="/" className={`text-4xl font-serif ${logoColor}`}>
-          MODEVA
+        <div>
+        <Link to="/" className={`text-4xl font-serif text-[#8B4513]`}>
+          M
         </Link>
+        <Link to="/" className={`text-4xl font-serif ${logoColor}`}>
+        
+          ODEVA
+        </Link>
+        </div>
 
         <div className={`hidden md:flex space-x-8 ${textColor}`}>
           <Link to="/catalog" className="flex items-center">
