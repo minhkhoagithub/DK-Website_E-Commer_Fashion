@@ -8,7 +8,7 @@ const AboutPage = () => {
         </div>
 
         <div className="mb-12">
-          <img src="/hero-image.png" alt="About MODEVA" className="w-full h-96 object-cover rounded-lg" />
+          <img src="../img/about-modeva.png" alt="About MODEVA" className="w-full h-96 object-cover rounded-lg" />
         </div>
 
         <div className="prose prose-lg max-w-none mb-12">

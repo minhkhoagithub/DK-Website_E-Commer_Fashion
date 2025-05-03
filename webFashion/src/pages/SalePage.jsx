@@ -20,7 +20,7 @@ const SalePage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           <div className="relative h-80 rounded-lg overflow-hidden">
-            <img src="/product1.png" alt="Sale item" className="w-full h-full object-cover" />
+            <img src="../img/summer-sale-modeva.png" alt="Sale item" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6">
               <h3 className="text-2xl font-serif mb-2">Summer Collection</h3>
               <p className="text-center mb-4">Up to 30% off on summer essentials</p>
@@ -31,7 +31,7 @@ const SalePage = () => {
           </div>
 
           <div className="relative h-80 rounded-lg overflow-hidden">
-            <img src="/product2.png" alt="Sale item" className="w-full h-full object-cover" />
+            <img src="../img/winter-sale-modeva.png" alt="Sale item" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6">
               <h3 className="text-2xl font-serif mb-2">Winter Clearance</h3>
               <p className="text-center mb-4">Up to 50% off on winter items</p>

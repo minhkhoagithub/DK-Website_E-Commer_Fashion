@@ -10,7 +10,7 @@ const NewArrivalPage = () => {
         </div>
 
         <div className="relative h-96 rounded-lg overflow-hidden mb-12">
-          <img src="/hero-image.png" alt="New collection" className="w-full h-full object-cover" />
+          <img src="../img/new-arrivals-modeva.png" alt="New collection" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6">
             <h2 className="text-3xl font-serif mb-2">Spring/Summer 2023</h2>
             <p className="text-center mb-6 max-w-md">
