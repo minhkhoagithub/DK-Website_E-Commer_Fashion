@@ -1,10 +1,10 @@
 const AdminDashboardPage = () => {
-  // Mock data for admin dashboard
+
   const stats = [
-    { label: "Total Users", value: "1,234" },
-    { label: "Active Users", value: "1,021" },
-    { label: "New Users (Today)", value: "12" },
-    { label: "Total Revenue", value: "$12,345" },
+    { label: "Total Users"},
+    { label: "Active Users"},
+    { label: "New Users (Today)"},
+    { label: "Total Revenue"},
   ]
 
   return (
