@@ -1,38 +1,54 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 import { ChevronDown, Search, User, ShoppingCart, Menu, LogOut } from "lucide-react"
 import { useAuth } from "../../contexts/AuthContext"
+import { useCart } from "../../contexts/CartContext"
 import MobileMenu from "./MobileMenu"
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [profileMenuOpen, setProfileMenuOpen] = useState(false)
+  const [searchValue, setSearchValue] = useState("")
   const { currentUser, isAuthenticated, isAdmin, logout } = useAuth()
+  const { getTotalItems } = useCart()
   const location = useLocation()
 
   // Determine if we're on a dark background page (like home)
-  const isDarkBg = location.pathname === "/"
-
+  const isDarkBg = location.pathname === "/" || location.pathname === "/catalog"
 
   const textColor = isDarkBg ? "text-white" : "text-[#3e3e3e]"
   const logoColor = isDarkBg ? "text-white" : "text-[#3e3e3e]"
 
+  // Close profile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuOpen && !event.target.closest(".profile-menu")) {
+        setProfileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [profileMenuOpen])
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    // Implement search functionality
+    console.log("Searching for:", searchValue)
+  }
+
   return (
     <>
       <nav
-        className={`mt-8 z-30 flex justify-between items-center px-8 py-4 ${isDarkBg ? "absolute w-full z-10" : "bg-white shadow-sm"}`}
+        className={`flex justify-between items-center px-8 py-6 ${isDarkBg ? "absolute w-full z-10" : "bg-white shadow-sm"}`}
       >
-        <div>
-        <Link to="/" className={`text-4xl font-serif text-[#8B4513]`}>
-          M
-        </Link>
         <Link to="/" className={`text-4xl font-serif ${logoColor}`}>
-        
-          ODEVA
+          MODEVA
         </Link>
-        </div>
 
         <div className={`hidden md:flex space-x-8 ${textColor}`}>
           <Link to="/catalog" className="flex items-center">
@@ -50,16 +66,20 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <div className="relative hidden sm:block">
+          <form onSubmit={handleSearch} className="relative hidden sm:block">
             <input
               type="text"
               placeholder="Search"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
               className="bg-white rounded-md py-1 px-3 pl-8 text-sm w-40 border border-gray-200"
             />
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          </div>
+            <button type="submit" className="absolute left-2 top-1/2 transform -translate-y-1/2">
+              <Search className="w-4 h-4 text-gray-400" />
+            </button>
+          </form>
 
-          <div className="relative">
+          <div className="relative profile-menu">
             <button onClick={() => setProfileMenuOpen(!profileMenuOpen)} className={`${textColor} hover:opacity-80`}>
               <User className="w-5 h-5" />
             </button>
@@ -103,7 +123,14 @@ const Navbar = () => {
             )}
           </div>
 
-          <ShoppingCart className={`w-5 h-5 ${textColor}`} />
+          <Link to="/cart" className={`${textColor} hover:opacity-80 relative`}>
+            <ShoppingCart className="w-5 h-5" />
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {getTotalItems()}
+              </span>
+            )}
+          </Link>
 
           <button className="md:hidden" onClick={() => setMobileMenuOpen(true)}>
             <Menu className={`w-6 h-6 ${textColor}`} />

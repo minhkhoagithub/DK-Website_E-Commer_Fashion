@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useState, useContext, useEffect } from "react"
+import { loginUser, registerUser, deleteUserAccount } from "../services/userApi"
 
 // Create the authentication context
 const AuthContext = createContext()
@@ -13,6 +14,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
@@ -23,28 +25,85 @@ export const AuthProvider = ({ children }) => {
     setLoading(false)
   }, [])
 
-  // Login function
-  const login = (email, password) => {
-    // In a real app, you would validate credentials against a backend
-    // For demo purposes, we'll use hardcoded users
-    if (email === "admin@example.com" && password === "admin123") {
-      const user = { id: 1, name: "Admin User", email, role: "admin" }
-      setCurrentUser(user)
-      localStorage.setItem("user", JSON.stringify(user))
-      return { success: true, user }
-    } else if (email === "user@example.com" && password === "user123") {
-      const user = { id: 2, name: "Regular User", email, role: "user" }
-      setCurrentUser(user)
-      localStorage.setItem("user", JSON.stringify(user))
-      return { success: true, user }
+  // Register function
+  const register = async (name, email, password, confirmPassword) => {
+    setError(null)
+
+    // Validate password match
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return { success: false, message: "Passwords do not match" }
     }
-    return { success: false, message: "Invalid credentials" }
+
+    try {
+      const result = await registerUser({ name, email, password })
+
+      if (result.success) {
+        setCurrentUser(result.user)
+        localStorage.setItem("user", JSON.stringify(result.user))
+      } else {
+        setError(result.message)
+      }
+
+      return result
+    } catch (err) {
+      const message = err.message || "Registration failed"
+      setError(message)
+      return { success: false, message }
+    }
+  }
+
+  // Login function
+  const login = async (email, password) => {
+    setError(null)
+
+    try {
+      const result = await loginUser(email, password)
+
+      if (result.success) {
+        setCurrentUser(result.user)
+        localStorage.setItem("user", JSON.stringify(result.user))
+      } else {
+        setError(result.message)
+      }
+
+      return result
+    } catch (err) {
+      const message = err.message || "Login failed"
+      setError(message)
+      return { success: false, message }
+    }
   }
 
   // Logout function
   const logout = () => {
     setCurrentUser(null)
     localStorage.removeItem("user")
+    return { success: true }
+  }
+
+  // Update user in context after profile changes
+  const updateUserInContext = (updatedUser) => {
+    setCurrentUser(updatedUser)
+    localStorage.setItem("user", JSON.stringify(updatedUser))
+  }
+
+  // Delete account
+  const deleteAccount = async (password) => {
+    if (!currentUser) return { success: false, message: "Not logged in" }
+
+    try {
+      const result = await deleteUserAccount(currentUser.id, password)
+
+      if (result.success) {
+        setCurrentUser(null)
+        localStorage.removeItem("user")
+      }
+
+      return result
+    } catch (err) {
+      return { success: false, message: err.message || "Failed to delete account" }
+    }
   }
 
   // Check if user is admin
@@ -59,8 +118,12 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
+    error,
     login,
     logout,
+    register,
+    updateUserInContext,
+    deleteAccount,
     isAdmin,
     isAuthenticated,
   }

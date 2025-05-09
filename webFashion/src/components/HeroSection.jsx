@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react"
 import ProductCard from "./ProductCard"
+import { Link } from "react-router-dom"
 
 const HeroSection = () => {
   const products = [
@@ -24,9 +25,9 @@ const HeroSection = () => {
 
       <img src="/hero-image.png" alt="Fashion model wearing a brown coat" className="object-cover w-full h-full" />
       <div className="absolute inset-0 flex flex-col justify-center px-8 md:px-16 lg:px-24 z-10">
-        <p className="text-white text-sm md:text-base tracking-widest mb-4">
+        <Link to="/catalog" className="text-white text-sm md:text-base tracking-widest mb-4">
           MADE IN INDONESIA, DEDICATED TO INDONESIA
-        </p>
+        </Link>
         <h1 className="text-white text-4xl md:text-6xl lg:text-7xl font-serif leading-tight max-w-2xl">
           DISCOVER THE ART OF DRESSING UP
         </h1>

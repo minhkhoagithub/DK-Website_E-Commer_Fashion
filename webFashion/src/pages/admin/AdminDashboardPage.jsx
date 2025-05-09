@@ -1,65 +1,38 @@
 import { Link } from "react-router-dom"
 import { Users, ShoppingBag, DollarSign, TrendingUp } from "lucide-react"
-import { useEffect, useState } from "react"
 
 const AdminDashboardPage = () => {
-  const [statsData, setStatsData] = useState([])
-  const [recentOrders, setRecentOrders] = useState([]) 
-
-  useEffect(() => {
-
-    fetch("https://68178ad726a599ae7c3ab478.mockapi.io/api/v1/data/Dashboard")
-      .then((res) => res.json())
-      .then((data) => setStatsData(data))
-      .catch((err) => console.error("Lỗi khi fetch API:", err))
-
-
-    
-  }, [])
-
-  useEffect(() => {fetch("https://68178ad726a599ae7c3ab478.mockapi.io/api/v1/data/data1")
-    .then((res) => res.json())
-    .then((data) => {
-      setStatsData(data)
-      if (data.length > 0) {
-        setRecentOrders(data.slice(0, 5)) 
-      }
-    })
-    .catch((err) => console.error("Lỗi khi fetch API:", err));
-  }, [])
-
-  const latest = statsData.length > 0 ? statsData[statsData.length - 1] : null
-
-  const stats = latest ? [
+  // Mock data for admin dashboard
+  const stats = [
     {
       icon: Users,
       label: "Total Users",
-      value: latest.totalUser,
-      change: latest.change,
-      changeType: latest.changeType
+      value: "1,234",
+      change: "+12%",
+      changeType: "positive",
     },
     {
       icon: ShoppingBag,
       label: "Total Orders",
-      value: latest.totalOrders,
-      change: latest.change,
-      changeType: latest.changeType
+      value: "856",
+      change: "+5%",
+      changeType: "positive",
     },
     {
       icon: DollarSign,
       label: "Revenue",
-      value: `IDR ${parseFloat(latest.revenue).toLocaleString("id-ID")}`,
-      change: latest.change,
-      changeType: latest.changeType
+      value: "IDR 125M",
+      change: "+18%",
+      changeType: "positive",
     },
     {
       icon: TrendingUp,
       label: "Conversion Rate",
-      value: `${latest.conversionRate}%`,
-      change: latest.change,
-      changeType: latest.changeType
+      value: "3.2%",
+      change: "-0.5%",
+      changeType: "negative",
     },
-  ] : []
+  ]
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -105,14 +78,14 @@ const AdminDashboardPage = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-serif text-[#3e3e3e] mb-4">Recent Activity</h2>
             <div className="space-y-4">
-              {recentOrders.map((order, index) => (
-                <div key={index} className="border-b pb-3">
+              {[1, 2, 3, 4, 5].map((item) => (
+                <div key={item} className="border-b pb-3">
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="font-medium text-[#3e3e3e]">New order placed</p>
-                      <p className="text-sm text-gray-600">Order ID: {order.orderId}</p>
+                      <p className="text-sm text-gray-600">Order ID: #MOD-2023-{1000 + item}</p>
                     </div>
-                    <p className="text-xs text-gray-500">{order.timeAgo}</p>
+                    <p className="text-xs text-gray-500">{item} hour(s) ago</p>
                   </div>
                 </div>
               ))}
@@ -125,7 +98,7 @@ const AdminDashboardPage = () => {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-serif text-[#3e3e3e] mb-4">Top Selling Products</h2>
             <div className="space-y-4">
-              {[ 
+              {[
                 { name: "Brown Leather Jacket", sales: 124, revenue: "IDR 148.8M" },
                 { name: "Elegant Black Dress", sales: 98, revenue: "IDR 83.3M" },
                 { name: "Classic White Shirt", sales: 87, revenue: "IDR 43.5M" },

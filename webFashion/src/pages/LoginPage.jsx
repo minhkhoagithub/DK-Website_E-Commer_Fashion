@@ -10,16 +10,44 @@ const LoginPage = () => {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [validationErrors, setValidationErrors] = useState({})
   const { login } = useAuth()
   const navigate = useNavigate()
+
+  const validateForm = () => {
+    const errors = {}
+
+    // Email validation
+    if (!email) {
+      errors.email = "Email is required"
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "Email address is invalid"
+    }
+
+    // Password validation
+    if (!password) {
+      errors.password = "Password is required"
+    } else if (password.length < 6) {
+      errors.password = "Password must be at least 6 characters"
+    }
+
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
+
+    // Validate form before submission
+    if (!validateForm()) {
+      return
+    }
+
     setLoading(true)
 
     try {
-      const result = login(email, password)
+      const result = await login(email, password)
       if (result.success) {
         navigate("/dashboard")
       } else {
@@ -37,7 +65,7 @@ const LoginPage = () => {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - Image */}
       <div className="hidden md:block md:w-1/2 relative">
-        <img src="../img/login_image.png" alt="Fashion model" className="w-full h-full object-cover" />
+        <img src="/hero-image.png" alt="Fashion model" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
           <div className="text-center text-white p-8">
             <h1 className="text-4xl font-serif mb-4">MODEVA</h1>
@@ -78,11 +106,22 @@ const LoginPage = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#8b4513] focus:border-[#8b4513] sm:text-sm"
+                className={`appearance-none block w-full px-3 py-2 border ${
+                  validationErrors.email ? "border-red-500" : "border-gray-300"
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#8b4513] focus:border-[#8b4513] sm:text-sm`}
                 placeholder="Enter your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                  if (validationErrors.email) {
+                    setValidationErrors({
+                      ...validationErrors,
+                      email: null,
+                    })
+                  }
+                }}
               />
+              {validationErrors.email && <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>}
             </div>
 
             <div>
@@ -95,11 +134,22 @@ const LoginPage = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#8b4513] focus:border-[#8b4513] sm:text-sm"
+                className={`appearance-none block w-full px-3 py-2 border ${
+                  validationErrors.password ? "border-red-500" : "border-gray-300"
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#8b4513] focus:border-[#8b4513] sm:text-sm`}
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                  if (validationErrors.password) {
+                    setValidationErrors({
+                      ...validationErrors,
+                      password: null,
+                    })
+                  }
+                }}
               />
+              {validationErrors.password && <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>}
             </div>
 
             <div className="flex items-center justify-between">
@@ -132,6 +182,15 @@ const LoginPage = () => {
               </button>
             </div>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Don't have an account?{" "}
+              <Link to="/register" className="font-medium text-[#8b4513] hover:text-[#a05a2c]">
+                Create one
+              </Link>
+            </p>
+          </div>
 
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">Demo Accounts:</p>

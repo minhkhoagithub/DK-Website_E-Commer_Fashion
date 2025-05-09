@@ -1,55 +1,84 @@
 "use client"
-
-
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import React, { useState } from "react"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
 
-export function RegisterForm() {
+export default function RegisterForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  })
+
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-//   const handleSubmit = (e: React.FormEvent) => {
-//     e.preventDefault()
-//     // Handle form submission logic here
-//   }
+  const handleChange = (e) => {
+    const { id, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }))
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match.")
+      return
+    }
+
+    console.log("Form data:", formData)
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Name */}
       <div className="space-y-2">
-        <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="text-sm font-medium text-gray-700 block">
           NAME
-        </Label>
-        <Input id="name" placeholder="John Doe" className="h-12 rounded-sm border-gray-300 bg-white" required />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-          EMAIL
-        </Label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="example@email.com"
-          className="h-12 rounded-sm border-gray-300 bg-white"
+        </label>
+        <input
+          id="name"
+          type="text"
           required
+          value={formData.name}
+          onChange={handleChange}
+          placeholder="John Doe"
+          className="w-full h-12 border border-gray-300 rounded-sm px-3 bg-white"
         />
       </div>
 
+      {/* Email */}
       <div className="space-y-2">
-        <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+        <label htmlFor="email" className="text-sm font-medium text-gray-700 block">
+          EMAIL
+        </label>
+        <input
+          id="email"
+          type="email"
+          required
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="example@email.com"
+          className="w-full h-12 border border-gray-300 rounded-sm px-3 bg-white"
+        />
+      </div>
+
+      {/* Password */}
+      <div className="space-y-2">
+        <label htmlFor="password" className="text-sm font-medium text-gray-700 block">
           PASSWORD
-        </Label>
+        </label>
         <div className="relative">
-          <Input
+          <input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="••••••••"
-            className="h-12 rounded-sm border-gray-300 bg-white pr-10"
             required
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            className="w-full h-12 border border-gray-300 rounded-sm px-3 pr-10 bg-white"
           />
           <button
             type="button"
@@ -61,17 +90,20 @@ export function RegisterForm() {
         </div>
       </div>
 
+      {/* Confirm Password */}
       <div className="space-y-2">
-        <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
+        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700 block">
           CONFIRM PASSWORD
-        </Label>
+        </label>
         <div className="relative">
-          <Input
+          <input
             id="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
-            placeholder="••••••••"
-            className="h-12 rounded-sm border-gray-300 bg-white pr-10"
             required
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="••••••••"
+            className="w-full h-12 border border-gray-300 rounded-sm px-3 pr-10 bg-white"
           />
           <button
             type="button"
@@ -83,9 +115,13 @@ export function RegisterForm() {
         </div>
       </div>
 
-      <Button type="submit" className="mt-8 h-12 w-full rounded-sm bg-amber-800 text-white hover:bg-amber-900">
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="mt-8 h-12 w-full rounded-sm bg-amber-800 text-white hover:bg-amber-900 transition"
+      >
         REGISTER
-      </Button>
+      </button>
     </form>
   )
 }

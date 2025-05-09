@@ -10,8 +10,8 @@ const MobileMenu = ({ isOpen, onClose }) => {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 overflow-y-auto">
-      <div className="flex justify-between items-center p-6">
+    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex flex-col">
+      <div className="flex justify-between items-center p-8">
         <Link to="/" className="text-4xl font-serif text-white" onClick={onClose}>
           MODEVA
         </Link>
@@ -20,7 +20,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
         </button>
       </div>
 
-      <div className="flex flex-col items-center px-4 pb-8 space-y-6 text-white text-xl">
+      <div className="flex flex-col items-center justify-center flex-1 space-y-8 text-white text-xl">
         <Link to="/catalog" className="flex items-center" onClick={onClose}>
           Catalog <ChevronDown className="ml-1 w-5 h-5" />
         </Link>
